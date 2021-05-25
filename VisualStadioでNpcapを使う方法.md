@@ -24,7 +24,7 @@ Visual StadioでNpcapを使う方法
 
     -   VC++ ディレクトリ　> インクルードディレクトリ > 編集  > 新しい行 > npcap-sdk-1.07\Include　を選択
 
-    -  リンカー　> 入力 > 追加の依存ファイル > 編集  > Packet.lib　(改行) wpcap.lib
+    -  リンカー　> 入力 > 追加の依存ファイル > 編集  > Packet.lib;wpcap.lib
 
 -   以下のソースを試す
 

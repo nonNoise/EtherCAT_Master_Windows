@@ -1,0 +1,7 @@
+﻿  dump_test.c
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(45,3): warning C4098: 'main': 戻り値の型が 'void' で宣言された関数が、値を返しました。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(10,13): warning C4101: 'alldevs': ローカル変数は 1 度も使われていません。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(12,6): warning C4101: 'inum': ローカル変数は 1 度も使われていません。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(11,13): warning C4101: 'd': ローカル変数は 1 度も使われていません。
+LINK : warning LNK4076: 削除対象のインクリメンタル ステータス ファイル 'Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\Debug\dump_test.ilk' は無効です。インクリメンタル リンクを行わずにリンクします。
+  dump_test.vcxproj -> Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\Debug\dump_test.exe
