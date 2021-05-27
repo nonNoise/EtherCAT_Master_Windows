@@ -1,17 +1,18 @@
 ﻿  dump_test.c
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(1,1): warning C4819: ファイルは、現在のコード ページ (932) で表示できない文字を含んでいます。データの損失を防ぐために、ファイルを Unicode 形式で保存してください。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(32,16): warning C4133: '関数': 'FILE *' と 'const char *const ' の間で型に互換性がありません。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(81,16): warning C4133: '関数': 'FILE *' と 'const char *const ' の間で型に互換性がありません。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(82,12): warning C4047: 'return': 間接参照のレベルが 'pcap_t *' と 'int' で異なっています。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(56,19): warning C4013: 関数 'localtime' は定義されていません。int 型の値を返す外部関数と見なします。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(56,34): warning C4047: '=': 間接参照のレベルが 'tm *' と 'int' で異なっています。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(57,10): warning C4013: 関数 'strftime' は定義されていません。int 型の値を返す外部関数と見なします。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(64,2): warning C4098: 'main': 戻り値の型が 'void' で宣言された関数が、値を返しました。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(38,16): warning C4101: 'packet': ローカル変数は 1 度も使われていません。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(33,16): warning C4133: '関数': 'FILE *' と 'const char *const ' の間で型に互換性がありません。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(82,16): warning C4133: '関数': 'FILE *' と 'const char *const ' の間で型に互換性がありません。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(83,12): warning C4047: 'return': 間接参照のレベルが 'pcap_t *' と 'int' で異なっています。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(104,16): warning C4133: '関数': 'FILE *' と 'const char *const ' の間で型に互換性がありません。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(119,20): warning C4013: 関数 'localtime' は定義されていません。int 型の値を返す外部関数と見なします。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(119,35): warning C4047: '=': 間接参照のレベルが 'tm *' と 'int' で異なっています。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(120,11): warning C4013: 関数 'strftime' は定義されていません。int 型の値を返す外部関数と見なします。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(58,2): warning C4098: 'main': 戻り値の型が 'void' で宣言された関数が、値を返しました。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(15,6): warning C4101: 'inum': ローカル変数は 1 度も使われていません。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(18,7): warning C4101: 'errbuf': ローカル変数は 1 度も使われていません。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(14,13): warning C4101: 'd': ローカル変数は 1 度も使われていません。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(84,34): warning C4047: '=': 間接参照のレベルが 'tm *' と 'int' で異なっています。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(95): warning C4716: 'pcap_CloseDevice': 値を返さなければいけません
-LINK : warning LNK4076: 削除対象のインクリメンタル ステータス ファイル 'Debug\dump_test.ilk' は無効です。インクリメンタル リンクを行わずにリンクします。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(78,34): warning C4047: '=': 間接参照のレベルが 'tm *' と 'int' で異なっています。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(106): warning C4716: 'pcap_RawSend': 値を返さなければいけません
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(127): warning C4716: 'pcap_RawReceive': 値を返さなければいけません
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(96): warning C4716: 'pcap_CloseDevice': 値を返さなければいけません
   dump_test.vcxproj -> Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\Debug\dump_test.exe

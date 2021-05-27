@@ -13,6 +13,7 @@ typedef struct {
 
 
 void packet_handler(u_char* param, const struct pcap_pkthdr* header, const u_char* pkt_data);
+void dump(const unsigned char* data_buffer, const unsigned int length);
 
 
 //================================================================================//
@@ -42,7 +43,7 @@ int pcap_GetDeviceList(pcapDeviceList_t *dvicelist,int maxlist)
 			dvicelist[device_num].name[EC_MAXLEN_ADAPTERNAME-1] = '\n';
 			if (d->description)
 			{
-				strcpy_s(dvicelist[device_num].description, EC_MAXLEN_ADAPTERNAME, d->name);
+				strcpy_s(dvicelist[device_num].description, EC_MAXLEN_ADAPTERNAME, d->description);
 				dvicelist[device_num].description[EC_MAXLEN_ADAPTERNAME-1] = '\n';	
 			}
 			else
@@ -96,8 +97,38 @@ int pcap_CloseDevice(pcap_t* adhandle)
 
 
 
+int pcap_RawSend(const u_char *send_packet,int size,pcap_t* adhandle)
+{
+	if (pcap_sendpacket(adhandle, send_packet, size) != 0)
+	{
+		printf(stderr, "\nError sending the packet: \n", pcap_geterr(adhandle));
+	}
+}
 
-void dump(const unsigned char* data_buffer, const unsigned int length) {
+int pcap_RawReceive(const u_char* Receive_packet,struct pcap_pkthdr* header,pcap_t* adhandle)
+{
+	int res;
+	struct tm* ltime;
+	char timestr[16];
+	time_t local_tv_sec;
+
+	if(res = pcap_next_ex(adhandle, &header, &Receive_packet) != 0)
+	{
+		/* convert the timestamp to readable format */
+		local_tv_sec = header->ts.tv_sec;
+		ltime = localtime(&local_tv_sec);
+		strftime(timestr, sizeof timestr, "%H:%M:%S", ltime);
+
+		printf("%s,%.6d len:%d\n", timestr, header->ts.tv_usec, header->len);
+
+		//printf("packet size = %d\n", header.len);
+		dump(Receive_packet, header->len);
+	}
+}
+
+
+void dump(const unsigned char* data_buffer, const unsigned int length)
+{
 	unsigned char byte;
 	unsigned int i, j;
 	for (i = 0; i < length; i++) {
