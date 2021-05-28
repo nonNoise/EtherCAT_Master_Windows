@@ -6,8 +6,7 @@
 void main()
 {
 
-    EtherCATFream_t ecatf;
-
+    EtherCATFrame_t ecatf;
     ecatf.CMD = 1;
     ecatf.IDX = 2;
     ecatf.ADP = 3;
@@ -16,9 +15,24 @@ void main()
     ecatf.NEXT = 6;
     ecatf.IRQ = 7;
     ecatf.DATA = "ABCD";
-    ecatf.DataSize = 2;
+    ecatf.DataSize = 4;
     ecatf.WKC = 8;
-    build_socket(ecatf);
+    
+    Framebuff_t ecat_frame;
+    Framebuff_t ecat_hedder;
+    Framebuff_t soccet;
+    Framebuff_t send;
+    
+    ecat_frame = ethercat_fream(ecatf);
+    ecat_hedder = ethercat_hedder_frame(ecat_frame.length);
+    soccet = socket_fream();
+    frame_add(&send,soccet);
+    frame_add(&send,ecat_hedder);
+    frame_add(&send,ecat_frame);
+
+    //printf("%d",send.length);
+    dump(send.frame,send.length);
+
 
 /*
 uint8_t CMD = 1;
