@@ -2,23 +2,63 @@
 //#include <pcap.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 
-typedef struct { 
-	uint8_t CMD;
-	uint8_t IDX;
-	uint8_t ADP;
-	uint8_t ADO;
+
+// Auto increment physical read
+#define EtherCAT_Command_APRD	 0x01
+// Configured address physical read
+#define EtherCAT_Command_FPRD	 0x04
+//Broadcast read
+#define EtherCAT_Command_BRD	 0x07
+// Logical memory read
+#define EtherCAT_Command_LRD	 0x0A
+// Auto increment physical write
+#define EtherCAT_Command_APWR	 0x02
+// Configured address physical write
+#define EtherCAT_Command_FPWR	 0x05
+// Broadcast write
+#define EtherCAT_Command_BWR	 0x08
+// Logical memory write
+#define EtherCAT_Command_LWR	 0x0B
+// Auto increment physical read write
+#define EtherCAT_Command_APRW	 0x03
+// Configured address physical read write
+#define EtherCAT_Command_FPRW	 0x06
+// Configured address physical read write
+#define EtherCAT_Command_BRW	 0x09
+// Logical memory read write
+#define EtherCAT_Command_LRW	 0x0C
+// Auto increment physical read multiple write
+#define EtherCAT_Command_ARMW	 0x0D
+// Configured address physical read multiple write
+#define EtherCAT_Command_FRMW	 0x0E
+
+// int CMD: Command
+// int IDX: Index
+// int ADP: ADdress Position 16 bits (MSB half of 32bit)
+// int ADO: ADdress Offset 16 bits (LSB half of 32 bit)
+// int C:
+// int NEXT:
+// int IRQ:
+// list DATA:
+// int WKC: working counter	
+typedef struct { 	
+	uint16_t CMD;
+	uint16_t IDX;
+	uint16_t ADP;
+	uint16_t ADO;
 	uint8_t C;
 	uint8_t	NEXT;
 	uint8_t	IRQ;
-	char 	*DATA;
+	uint16_t *DATA;
 	uint16_t	DataSize;
 	uint8_t WKC;
 }EtherCATFrame_t;
 
 typedef struct { 
-	uint8_t frame[100];
+	uint8_t *frame;
 	uint8_t length;
 }Framebuff_t;
 
@@ -29,95 +69,74 @@ typedef struct {
 void dump(const unsigned char* data_buffer, const unsigned int length);
 
 
-Framebuff_t ethercat_fream(EtherCATFrame_t ecat)
+
+void ethercat_fream(EtherCATFrame_t *input,Framebuff_t *output)
 {
-	    /*
-        :param int CMD: Command
-        :param int IDX: Index
-        :param int ADP: ADdress Position 16 bits (MSB half of 32bit)
-        :param int ADO: ADdress Offset 16 bits (LSB half of 32 bit)
-        :param int C:
-        :param int NEXT:
-        :param int IRQ:
-        :param list DATA:
-        :param int WKC: working counter
-	*/
-	
-	//char tmp.frame[ecat.DataSize+13];
-	Framebuff_t tmp;
-	tmp.frame[0] = ecat.CMD;               			// CMD (1 byte)
-	tmp.frame[1] = ecat.IDX;              			// IDX (1 byte)
-	tmp.frame[2] = (ecat.ADP & 0xFF);       			// ADP (2 byte)
-	tmp.frame[3] = (ecat.ADP & 0xFF00) >> 8;
-	tmp.frame[4] = (ecat.ADO & 0xFF);      	  		// ADO (2 byte)
-	tmp.frame[5] = (ecat.ADO & 0xFF00) >> 8;
-	tmp.frame[6] = (ecat.DataSize & 0xFF);    		// LEN (2 byte)
-	tmp.frame[7] = (ecat.DataSize & 0xFF00) >> 8;
-	tmp.frame[8] = (ecat.IRQ & 0xFF);            	// IRQ (2 byte)
-	tmp.frame[9] = (ecat.IRQ & 0x00FF);         		// IRQ (2 byte)
-	for(int i=0;i<ecat.DataSize;i++){
-		tmp.frame[10 + i] = ecat.DATA[i];
+
+	output->frame = (uint8_t *)malloc(sizeof(uint8_t) *  (11 + input->DataSize+1) );
+	output->frame[0] = input->CMD;               			// CMD (1 byte)
+	output->frame[1] = input->IDX;              			// IDX (1 byte)
+	output->frame[2] = (input->ADP & 0xFF);       			// ADP (2 byte)
+	output->frame[3] = (input->ADP & 0xFF00) >> 8;
+	output->frame[4] = (input->ADO & 0xFF);      	  		// ADO (2 byte)
+	output->frame[5] = (input->ADO & 0xFF00) >> 8;
+	output->frame[6] = (input->DataSize & 0xFF);    		// LEN (2 byte)
+	output->frame[7] = (input->DataSize & 0xFF00) >> 8;
+	output->frame[8] = (input->IRQ & 0xFF);            	// IRQ (2 byte)
+	output->frame[9] = (input->IRQ & 0x00FF);         		// IRQ (2 byte)
+	for(int i=0;i<input->DataSize;i++){
+		output->frame[10 + i] = input->DATA[i];
 	}
-	tmp.frame[10 + ecat.DataSize] = (ecat.WKC & 0xFF);    		// WKC (2 byte)
-	tmp.frame[11 + ecat.DataSize] = (ecat.WKC & 0xFF00) >> 8;    // WKC (2 byte)
-	tmp.length = 11 + ecat.DataSize+1;
-	return tmp;
+	output->frame[10 + input->DataSize] = (input->WKC & 0xFF);    		// WKC (2 byte)
+	output->frame[11 + input->DataSize] = (input->WKC & 0xFF00) >> 8;    // WKC (2 byte)
+	output->length = 11 + input->DataSize+1;
+	//return *tmp;
 }
 
 
-Framebuff_t ethercat_hedder_frame(int length)
+void ethercat_hedder_add_frame(Framebuff_t *input,Framebuff_t *output)
 {	
-	Framebuff_t tmp;
-	tmp.frame[0] = (11 + length);
-	tmp.frame[1] = 0x10 | ((0x700 & (11 + length) ) >> 8);
-	tmp.length = 2;
-	return tmp;
-}
-
-Framebuff_t socket_fream(void)
-{
-	
-	Framebuff_t socket_hedder;
-	// send mac addr //
-	socket_hedder.frame[0] = 0xff;
-	socket_hedder.frame[1] = 0xff;
-	socket_hedder.frame[2] = 0xff;
-	socket_hedder.frame[3] = 0xff;
-	socket_hedder.frame[4] = 0xff;
-	socket_hedder.frame[5] = 0xff;
-	// my mac addr //		
-	socket_hedder.frame[6] = 0x01;
-	socket_hedder.frame[7] = 0x01;
-	socket_hedder.frame[8] = 0x01;
-	socket_hedder.frame[9] = 0x01;
-	socket_hedder.frame[10] = 0x01;
-	socket_hedder.frame[11] = 0x01;
-	// ethernet type //
-	socket_hedder.frame[12] = 0x88;
-	socket_hedder.frame[13] = 0xA4;
-	socket_hedder.length = 14;
-	return socket_hedder;
-}
-
-void frame_add(Framebuff_t *output,Framebuff_t input)
-{
-	for(int i=0;i<input.length;i++)
+	output->frame = (uint8_t*)malloc(sizeof(uint8_t) *  (input->length+2));
+	output->frame[0] = (11 + input->length);
+	output->frame[1] = 0x10 | ((0x700 & (11 + input->length) ) >> 8);
+	for(int i=0;i<input->length;i++)
 	{
-		output->frame[i+output->length-1] = input.frame[i];
+		output->frame[i+2] = input->frame[i];
 	}
-	output->length = input.length+output->length;
+	output->length = (input->length+2);
+	free(input->frame);
 }
-/*
-void send_frame()
+
+void socket_add_fream(Framebuff_t *input,Framebuff_t *output)
 {
-
-	uint8_t frame[1500];
 	
+	output->frame = (uint8_t*)malloc(sizeof(uint8_t) *  (input->length+14));
+	// send mac addr //
+	output->frame[0] = 0xff;
+	output->frame[1] = 0xff;
+	output->frame[2] = 0xff;
+	output->frame[3] = 0xff;
+	output->frame[4] = 0xff;
+	output->frame[5] = 0xff;
+	// my mac addr //		
+	output->frame[6] = 0x01;
+	output->frame[7] = 0x01;
+	output->frame[8] = 0x01;
+	output->frame[9] = 0x01;
+	output->frame[10] = 0x01;
+	output->frame[11] = 0x01;
+	// ethernet type //
+	output->frame[12] = 0x88;
+	output->frame[13] = 0xA4;
+	for(int i=0;i<input->length;i++)
+	{
+		output->frame[i+14] = input->frame[i];
+	}
+	output->length = input->length+14;
+	free(input->frame);
 
-
-
+	//return output->frame.length;
 }
-*/
 
 /*
  def socket_read(self):
@@ -159,6 +178,7 @@ void dump(const unsigned char* data_buffer, const unsigned int length)
 {
 	unsigned char byte;
 	unsigned int i, j;
+	printf("--------------------------------------------------------------------\n");
 	for (i = 0; i < length; i++) {
 		byte = data_buffer[i];
 		printf(" %02x", data_buffer[i]);

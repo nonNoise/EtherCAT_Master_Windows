@@ -97,15 +97,15 @@ int pcap_CloseDevice(pcap_t* adhandle)
 
 
 
-int pcap_RawSend(const u_char *send_packet,int size,pcap_t* adhandle)
+int pcap_RawSend(pcap_t* adhandle,const u_char *send_packet,int length)
 {
-	if (pcap_sendpacket(adhandle, send_packet, size) != 0)
+	if (pcap_sendpacket(adhandle, send_packet, length) != 0)
 	{
 		printf(stderr, "\nError sending the packet: \n", pcap_geterr(adhandle));
 	}
 }
 
-int pcap_RawReceive(const u_char* Receive_packet,struct pcap_pkthdr* header,pcap_t* adhandle)
+int pcap_RawReceive(pcap_t* adhandle,const u_char* Receive_packet,struct pcap_pkthdr* header)
 {
 	int res;
 	struct tm* ltime;
@@ -126,27 +126,19 @@ int pcap_RawReceive(const u_char* Receive_packet,struct pcap_pkthdr* header,pcap
 	}
 }
 
-
-void dump(const unsigned char* data_buffer, const unsigned int length)
+int pcap_Fillter(struct pcap_pkthdr* header,char filter_exp[])
 {
-	unsigned char byte;
-	unsigned int i, j;
-	for (i = 0; i < length; i++) {
-		byte = data_buffer[i];
-		printf(" %02x", data_buffer[i]);
-		if ((i % 16 == 15) || (i == length - 1)) {
-			for (j = 0; j < 15 - (i % 16); j++) {
-				printf("   ");
-			}
-			printf("| ");
-			for (j = (i - (i % 16)); j <= i; j++) {
-				byte = data_buffer[j];
-				if ((byte > 31) && (byte < 127))
-					printf("%c", byte);
-				else
-					printf(".");
-			}
-			printf("\n");
-		}
+	/*
+	struct bpf_program fp;
+	bpf_u_int32 net=0;		//IPアドレス 
+	// フィルタをコンパイルして適用する 
+	if (pcap_compile(header, &fp, filter_exp, 0, net) == -1) {
+		printf("フィルタ「%s」を解析できませんでした: %s\n", filter_exp, pcap_geterr(header));
+		exit(1);
 	}
+	if (pcap_setfilter(header, &fp) == -1) {
+		printf("フィルタ「%s」の組み込みができませんでした: %s\n", filter_exp, pcap_geterr(header));
+		exit(1);
+	}
+	*/
 }

@@ -2,7 +2,7 @@
 #include <pcap.h>
 
 #include "pcaplib.h"
-
+#include "EtherCATlib.h"
 void packet_handler(u_char* param, const struct pcap_pkthdr* header, const u_char* pkt_data);
 
 
@@ -34,26 +34,50 @@ void main()
 
 	adhandle = pcap_OpenDevice(dvicelist[select_device_num]);
 
+    EtherCATFrame_t ecatf;
+    ecatf.CMD = EtherCAT_Command_APWR;
+    ecatf.IDX = 0x00;
+    ecatf.ADP = 0x00;
+    ecatf.ADO = 0x0120;
+    ecatf.C = 0x00;
+    ecatf.NEXT = 0x00;
+    ecatf.IRQ = 0x00;
+	ecatf.DATA = (uint8_t*)malloc(sizeof(uint8_t) * (2));
+    ecatf.DATA[0] = 0x02;
+	ecatf.DATA[1] = 0x00;
 
+    ecatf.DataSize = 2;
+    ecatf.WKC = 0x00;
+    
+    Framebuff_t ecat_frame;
+    Framebuff_t ecat_hedder;
+    Framebuff_t soccet;
+    Framebuff_t send;
 
-	unsigned char send_packet[42] = {
-	0x11,0x22,0x33,0x44,0x55,0x66,0x12,0x34,0x56,0x78,0x9a,0xbc,0x08,0x06,
-	0,1,8,0,6,4,0,2,12,34,56,78,0x9a,0xbc,192,168,0,2,
-	11,22,33,44,55,66,192,168,0,1
-	};
+     ethercat_fream(&ecatf,&ecat_frame);
+     dump(ecat_frame.frame,ecat_frame.length);
+     ethercat_hedder_add_frame(&ecat_frame,&ecat_hedder);
+     dump(ecat_hedder.frame,ecat_hedder.length);
+     socket_add_fream(&ecat_hedder,&soccet);
+     dump(soccet.frame,soccet.length);
 
 	u_char* Receive_packet = NULL;
 	struct pcap_pkthdr* header = NULL;
-	//pcap_t* adhandle;
+	
+	pcap_Fillter(&header, "ECAT");
+
 
 	while(1)
 	{
-		pcap_RawSend(send_packet,100,adhandle);
 
-		pcap_RawReceive(Receive_packet,header,adhandle);
+
+		pcap_RawSend(adhandle, soccet.frame , soccet.length);
+
+		
+		pcap_RawReceive(adhandle,Receive_packet,&header);
 
 	}
-
+	
 
 	return 0;
 }
