@@ -14,8 +14,9 @@ void main()
 	pcap_if_t* d;
 	int inum;
 	int i = 0;
-	pcap_t* adhandle = NULL;
+	pcap_t* adhandle;
 	char errbuf[PCAP_ERRBUF_SIZE];
+
 
 
 	pcapDeviceList_t  dvicelist[10];
@@ -33,6 +34,10 @@ void main()
 	int select_device_num = 4;
 
 	adhandle = pcap_OpenDevice(dvicelist[select_device_num]);
+
+	char* Filter = "ether broadcast";
+	pcap_Fillter(adhandle, Filter);
+
 
     EtherCATFrame_t ecatf;
     ecatf.CMD = EtherCAT_Command_APWR;
@@ -55,26 +60,46 @@ void main()
     Framebuff_t send;
 
      ethercat_fream(&ecatf,&ecat_frame);
+
      dump(ecat_frame.frame,ecat_frame.length);
      ethercat_hedder_add_frame(&ecat_frame,&ecat_hedder);
      dump(ecat_hedder.frame,ecat_hedder.length);
      socket_add_fream(&ecat_hedder,&soccet);
      dump(soccet.frame,soccet.length);
 
-	u_char* Receive_packet = NULL;
-	struct pcap_pkthdr* header = NULL;
+
+	 char* Receive_packet;
+	 struct pcap_pkthdr* header;
 	
-	pcap_Fillter(&header, "ECAT");
 
-
-	while(1)
+	//while(1)
 	{
 
 
 		pcap_RawSend(adhandle, soccet.frame , soccet.length);
 
 		
-		pcap_RawReceive(adhandle,Receive_packet,&header);
+		//printf("1 point[ adhandle ]: %p\n", &adhandle);
+		printf("1 point[ Receive_packet ]: %p\n", &Receive_packet);
+		printf("1 point[ Receive_packet ]: %p\n", Receive_packet);
+		//printf("1 point[ header ]: %p\n", &header);
+
+		pcap_RawReceive(adhandle, &Receive_packet);
+
+		//{
+			//printf("4 point[ adhandle ]: %p\n", &adhandle);
+			printf("4 point[ Receive_packet ]: %p\n", &Receive_packet);
+			//printf("4 point[ header ]: %p\n", &header);
+
+			printf("4 point[ Receive_packet ]: %p\n", Receive_packet);
+
+			//dump(Receive_packet, header->len);
+
+			
+		//}
+
+		
+
 
 	}
 	

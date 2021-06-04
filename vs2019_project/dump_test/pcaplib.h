@@ -105,40 +105,64 @@ int pcap_RawSend(pcap_t* adhandle,const u_char *send_packet,int length)
 	}
 }
 
-int pcap_RawReceive(pcap_t* adhandle,const u_char* Receive_packet,struct pcap_pkthdr* header)
+void pcap_RawReceive(pcap_t* adhandle, char* Receive_packet)
 {
+
+	u_char* rpacket;
+	struct pcap_pkthdr* header;
 	int res;
 	struct tm* ltime;
 	char timestr[16];
 	time_t local_tv_sec;
 
-	if(res = pcap_next_ex(adhandle, &header, &Receive_packet) != 0)
+	//printf("2 point[ adhandle ]: %p\n", &adhandle);
+	printf("2 point[ Receive_packet ]: %p\n", &Receive_packet);
+	printf("2 point[ Receive_packet ]: %p\n", Receive_packet);
+	//printf("2 point[ header ]: %p\n", &header);
+
+
+	//if(res = pcap_next_ex(adhandle, &header, &Receive_packet) != 0)
 	{
+
+		//printf("3 point[ adhandle ]: %p\n", &adhandle);
+		//printf("3 point[ Receive_packet ]: %p\n", &rpacket);
+		//printf("3 point[ header ]: %p\n", &header);
+
+		
+		//Receive_packet = (char*)malloc(sizeof(char) );
+		//for (int i = 0; i < header->len; i++)
+		{
+		//	Receive_packet[i] = rpacket[i];
+		}
+		//printf("3.5 point[ adhandle ]: %p\n", &adhandle);
+		printf("3 point[ Receive_packet ]: %p\n", &Receive_packet);
+		printf("3 point[ Receive_packet ]: %p\n", Receive_packet);
+		//printf("3.5 point[ header ]: %p\n", &header);
+		
+
+
 		/* convert the timestamp to readable format */
-		local_tv_sec = header->ts.tv_sec;
-		ltime = localtime(&local_tv_sec);
-		strftime(timestr, sizeof timestr, "%H:%M:%S", ltime);
+		//local_tv_sec = header->ts.tv_sec;
+		//ltime = localtime(&local_tv_sec);
+		//strftime(timestr, sizeof timestr, "%H:%M:%S", ltime);
+		//printf("%s,%.6d len:%d\n", timestr, header->ts.tv_usec, header->len);
+		//dump(Receive_packet, header->len);
+		//return 0;//header.len;
 
-		printf("%s,%.6d len:%d\n", timestr, header->ts.tv_usec, header->len);
-
-		//printf("packet size = %d\n", header.len);
-		dump(Receive_packet, header->len);
 	}
+	//return 0;
 }
 
-int pcap_Fillter(struct pcap_pkthdr* header,char filter_exp[])
+int pcap_Fillter(pcap_t* header,char filter_exp[])
 {
-	/*
 	struct bpf_program fp;
-	bpf_u_int32 net=0;		//IPアドレス 
-	// フィルタをコンパイルして適用する 
-	if (pcap_compile(header, &fp, filter_exp, 0, net) == -1) {
-		printf("フィルタ「%s」を解析できませんでした: %s\n", filter_exp, pcap_geterr(header));
+	//char errbuf[PCAP_ERRBUF_SIZE];
+	if (pcap_compile(header, &fp, filter_exp, 0, 0) == -1) {
+		//printf("Error calling pcap_compile: %s \n", errbuf);
 		exit(1);
 	}
 	if (pcap_setfilter(header, &fp) == -1) {
-		printf("フィルタ「%s」の組み込みができませんでした: %s\n", filter_exp, pcap_geterr(header));
+		//printf("Error setting filter: %s \n", errbuf);
 		exit(1);
 	}
-	*/
 }
