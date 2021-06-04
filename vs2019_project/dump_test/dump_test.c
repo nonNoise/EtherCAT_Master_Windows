@@ -35,7 +35,10 @@ void main()
 
 	adhandle = pcap_OpenDevice(dvicelist[select_device_num]);
 
-	char* Filter = "ether broadcast";
+	//char* Filter = "ether broadcast";
+	//char* Filter = "ether dst ff:ff:ff:ff:ff:ff";
+	char* Filter = "ether src 01:01:01:01:01:01";
+
 	pcap_Fillter(adhandle, Filter);
 
 
@@ -48,9 +51,8 @@ void main()
     ecatf.NEXT = 0x00;
     ecatf.IRQ = 0x00;
 	ecatf.DATA = (uint8_t*)malloc(sizeof(uint8_t) * (2));
-    ecatf.DATA[0] = 0x02;
-	ecatf.DATA[1] = 0x00;
-
+    ecatf.DATA[0] = 'E';
+	ecatf.DATA[1] = 'T';
     ecatf.DataSize = 2;
     ecatf.WKC = 0x00;
     
@@ -72,39 +74,26 @@ void main()
 	 struct pcap_pkthdr* header;
 	
 
-	//while(1)
+	while(1)
 	{
-
-
 		pcap_RawSend(adhandle, soccet.frame , soccet.length);
 
-		
-		//printf("1 point[ adhandle ]: %p\n", &adhandle);
-		printf("1 point[ Receive_packet ]: %p\n", &Receive_packet);
-		printf("1 point[ Receive_packet ]: %p\n", Receive_packet);
-		//printf("1 point[ header ]: %p\n", &header);
+		if(pcap_RawReceive(adhandle,&header,&Receive_packet)>0)
+		{
+			struct tm* ltime;
+			char timestr[16];
+			time_t local_tv_sec;
 
-		pcap_RawReceive(adhandle, &Receive_packet);
+			local_tv_sec = header->ts.tv_sec;
+			ltime = localtime(&local_tv_sec);
+			strftime(timestr, sizeof timestr, "%H:%M:%S", ltime);
+			printf("%s,%.6d len:%d\n", timestr, header->ts.tv_usec, header->len);
 
-		//{
-			//printf("4 point[ adhandle ]: %p\n", &adhandle);
-			printf("4 point[ Receive_packet ]: %p\n", &Receive_packet);
-			//printf("4 point[ header ]: %p\n", &header);
-
-			printf("4 point[ Receive_packet ]: %p\n", Receive_packet);
-
-			//dump(Receive_packet, header->len);
-
-			
-		//}
-
-		
-
-
+			dump(Receive_packet, header->len);
+		}
 	}
-	
-
 	return 0;
+
 }
 
 

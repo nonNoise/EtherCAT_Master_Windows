@@ -105,52 +105,25 @@ int pcap_RawSend(pcap_t* adhandle,const u_char *send_packet,int length)
 	}
 }
 
-void pcap_RawReceive(pcap_t* adhandle, char* Receive_packet)
+int pcap_RawReceive(pcap_t* adhandle, struct pcap_pkthdr* header, char* Receive_packet)
 {
 
 	u_char* rpacket;
-	struct pcap_pkthdr* header;
+	
 	int res;
 	struct tm* ltime;
 	char timestr[16];
 	time_t local_tv_sec;
 
-	//printf("2 point[ adhandle ]: %p\n", &adhandle);
-	printf("2 point[ Receive_packet ]: %p\n", &Receive_packet);
-	printf("2 point[ Receive_packet ]: %p\n", Receive_packet);
-	//printf("2 point[ header ]: %p\n", &header);
-
-
-	//if(res = pcap_next_ex(adhandle, &header, &Receive_packet) != 0)
+	if(res = pcap_next_ex(adhandle, header, Receive_packet) != 0)
 	{
 
-		//printf("3 point[ adhandle ]: %p\n", &adhandle);
-		//printf("3 point[ Receive_packet ]: %p\n", &rpacket);
-		//printf("3 point[ header ]: %p\n", &header);
-
-		
-		//Receive_packet = (char*)malloc(sizeof(char) );
-		//for (int i = 0; i < header->len; i++)
-		{
-		//	Receive_packet[i] = rpacket[i];
-		}
-		//printf("3.5 point[ adhandle ]: %p\n", &adhandle);
-		printf("3 point[ Receive_packet ]: %p\n", &Receive_packet);
-		printf("3 point[ Receive_packet ]: %p\n", Receive_packet);
-		//printf("3.5 point[ header ]: %p\n", &header);
-		
-
-
-		/* convert the timestamp to readable format */
-		//local_tv_sec = header->ts.tv_sec;
-		//ltime = localtime(&local_tv_sec);
-		//strftime(timestr, sizeof timestr, "%H:%M:%S", ltime);
-		//printf("%s,%.6d len:%d\n", timestr, header->ts.tv_usec, header->len);
+		// convert the timestamp to readable format 
 		//dump(Receive_packet, header->len);
-		//return 0;//header.len;
+		return header->len;
 
 	}
-	//return 0;
+	return 0;
 }
 
 int pcap_Fillter(pcap_t* header,char filter_exp[])

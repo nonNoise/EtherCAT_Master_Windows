@@ -4,29 +4,32 @@ Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pc
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(82,16): warning C4133: '関数': 'FILE *' と 'const char *const ' の間で型に互換性がありません。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(83,12): warning C4047: 'return': 間接参照のレベルが 'pcap_t *' と 'int' で異なっています。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(104,16): warning C4133: '関数': 'FILE *' と 'const char *const ' の間で型に互換性がありません。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(118,40): warning C4047: '関数': 間接参照のレベルが 'pcap_pkthdr **' と 'pcap_pkthdr *' で異なっています。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(118,34): warning C4024: 'pcap_next_ex': の型が 2 の仮引数および実引数と異なります。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(118,56): warning C4047: '関数': 間接参照のレベルが 'const u_char **' と 'char *' で異なっています。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(118,42): warning C4024: 'pcap_next_ex': の型が 3 の仮引数および実引数と異なります。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(114,13): warning C4101: 'ltime': ローカル変数は 1 度も使われていません。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(111,10): warning C4101: 'rpacket': ローカル変数は 1 度も使われていません。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(116,9): warning C4101: 'local_tv_sec': ローカル変数は 1 度も使われていません。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(112,22): warning C4101: 'header': ローカル変数は 1 度も使われていません。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(115,7): warning C4101: 'timestr': ローカル変数は 1 度も使われていません。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(113,6): warning C4101: 'res': ローカル変数は 1 度も使われていません。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\EtherCATlib.h(77,31): warning C4244: '=': 'uint16_t' から 'uint8_t' への変換です。データが失われる可能性があります。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\EtherCATlib.h(78,31): warning C4244: '=': 'uint16_t' から 'uint8_t' への変換です。データが失われる可能性があります。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\EtherCATlib.h(88,41): warning C4244: '=': 'uint16_t' から 'uint8_t' への変換です。データが失われる可能性があります。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(50,54): warning C4133: '=': 'uint8_t *' と 'uint16_t *' の間で型に互換性がありません。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(87,44): warning C4047: '関数': 間接参照のレベルが 'char *' と 'char **' で異なっています。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(87,29): warning C4024: 'pcap_RawReceive': の型が 2 の仮引数および実引数と異なります。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(107,2): warning C4098: 'main': 戻り値の型が 'void' で宣言された関数が、値を返しました。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(72,23): warning C4101: 'header': ローカル変数は 1 度も使われていません。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(60,17): warning C4101: 'send': ローカル変数は 1 度も使われていません。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(53,54): warning C4133: '=': 'uint8_t *' と 'uint16_t *' の間で型に互換性がありません。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(81,38): warning C4047: '関数': 間接参照のレベルが 'pcap_pkthdr *' と 'pcap_pkthdr **' で異なっています。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(81,31): warning C4024: 'pcap_RawReceive': の型が 2 の仮引数および実引数と異なります。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(81,54): warning C4047: '関数': 間接参照のレベルが 'char *' と 'char **' で異なっています。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(81,39): warning C4024: 'pcap_RawReceive': の型が 3 の仮引数および実引数と異なります。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(88,21): warning C4013: 関数 'localtime' は定義されていません。int 型の値を返す外部関数と見なします。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(88,36): warning C4047: '=': 間接参照のレベルが 'tm *' と 'int' で異なっています。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(89,12): warning C4013: 関数 'strftime' は定義されていません。int 型の値を返す外部関数と見なします。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(95,2): warning C4098: 'main': 戻り値の型が 'void' で宣言された関数が、値を返しました。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(62,17): warning C4101: 'send': ローカル変数は 1 度も使われていません。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(15,6): warning C4101: 'inum': ローカル変数は 1 度も使われていません。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(18,7): warning C4101: 'errbuf': ローカル変数は 1 度も使われていません。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(14,13): warning C4101: 'd': ローカル変数は 1 度も使われていません。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(127,19): warning C4013: 関数 'localtime' は定義されていません。int 型の値を返す外部関数と見なします。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(127,34): warning C4047: '=': 間接参照のレベルが 'tm *' と 'int' で異なっています。
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(128,10): warning C4013: 関数 'strftime' は定義されていません。int 型の値を返す外部関数と見なします。
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\dump_test.c(116,34): warning C4047: '=': 間接参照のレベルが 'tm *' と 'int' で異なっています。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(96): warning C4716: 'pcap_CloseDevice': 値を返さなければいけません
+Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(141): warning C4715: 'pcap_Fillter': 値を返さないコントロール パスがあります。
 Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(106): warning C4716: 'pcap_RawSend': 値を返さなければいけません
-Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\pcaplib.h(168): warning C4715: 'pcap_Fillter': 値を返さないコントロール パスがあります。
-LINK : warning LNK4076: 削除対象のインクリメンタル ステータス ファイル 'Debug\dump_test.ilk' は無効です。インクリメンタル リンクを行わずにリンクします。
   dump_test.vcxproj -> Z:\kitagamiyuta\Github\Other\EtherCAT_Master_Windows\vs2019_project\dump_test\Debug\dump_test.exe
