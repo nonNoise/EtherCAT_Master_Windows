@@ -49,11 +49,11 @@ typedef struct {
 	uint16_t IDX;
 	uint16_t ADP;
 	uint16_t ADO;
+	uint16_t LEN;
 	uint8_t C;
 	uint8_t	NEXT;
 	uint8_t	IRQ;
 	uint16_t *DATA;
-	uint16_t	DataSize;
 	uint8_t WKC;
 }EtherCATFrame_t;
 
@@ -70,26 +70,26 @@ void dump(const unsigned char* data_buffer, const unsigned int length);
 
 
 
-void ethercat_fream(EtherCATFrame_t *input,Framebuff_t *output)
+void ethercat_build_fream(EtherCATFrame_t *input,Framebuff_t *output)
 {
 
-	output->frame = (uint8_t *)malloc(sizeof(uint8_t) *  (11 + input->DataSize+1) );
+	output->frame = (uint8_t *)malloc(sizeof(uint8_t) *  (11 + input->LEN +1) );
 	output->frame[0] = input->CMD;               			// CMD (1 byte)
 	output->frame[1] = input->IDX;              			// IDX (1 byte)
 	output->frame[2] = (input->ADP & 0xFF);       			// ADP (2 byte)
 	output->frame[3] = (input->ADP & 0xFF00) >> 8;
 	output->frame[4] = (input->ADO & 0xFF);      	  		// ADO (2 byte)
 	output->frame[5] = (input->ADO & 0xFF00) >> 8;
-	output->frame[6] = (input->DataSize & 0xFF);    		// LEN (2 byte)
-	output->frame[7] = (input->DataSize & 0xFF00) >> 8;
+	output->frame[6] = (input->LEN & 0xFF);    		// LEN (2 byte)
+	output->frame[7] = (input->LEN & 0xFF00) >> 8;
 	output->frame[8] = (input->IRQ & 0xFF);            	// IRQ (2 byte)
 	output->frame[9] = (input->IRQ & 0x00FF);         		// IRQ (2 byte)
-	for(int i=0;i<input->DataSize;i++){
+	for(int i=0;i<input->LEN;i++){
 		output->frame[10 + i] = input->DATA[i];
 	}
-	output->frame[10 + input->DataSize] = (input->WKC & 0xFF);    		// WKC (2 byte)
-	output->frame[11 + input->DataSize] = (input->WKC & 0xFF00) >> 8;    // WKC (2 byte)
-	output->length = 11 + input->DataSize+1;
+	output->frame[10 + input->LEN] = (input->WKC & 0xFF);    		// WKC (2 byte)
+	output->frame[11 + input->LEN] = (input->WKC & 0xFF00) >> 8;    // WKC (2 byte)
+	output->length = 11 + input->LEN +1;
 	//return *tmp;
 }
 
@@ -138,6 +138,24 @@ void socket_add_fream(Framebuff_t *input,Framebuff_t *output)
 	//return output->frame.length;
 }
 
+void ethercat_decode_fream(Framebuff_t *input,EtherCATFrame_t *output)
+{
+	dump(input->frame, input->length);
+	
+    output->CMD = input->frame[16+0];              // CMD (1 byte)
+    output->IDX = input->frame[16+1];              // IDX (1 byte)
+    output->ADP = input->frame[16+2] | (input->frame[16+3] << 8);    // ADP (2 byte)
+    output->ADO = input->frame[16+4] | (input->frame[16+5] << 8);    // ADO (2 byte)
+    output->LEN = input->frame[16+6] | (input->frame[16+7] << 8);    // LEN (2 byte)
+    output->IRQ = input->frame[16+8] | (input->frame[16+9] << 8);    // IRQ (2 byte)
+	output->DATA = (uint8_t*)malloc(sizeof(uint8_t) *  (output->LEN));
+	for(int i=0;i<output->LEN;i++)
+	{
+        output->DATA[i] = input->frame[16+10 + i];
+	}
+    output->WKC = input->frame[16+9 + output->LEN + 1] | ( input->frame[9 + output->LEN + 2] << 8);	// WKC (2 byte)
+        
+}
 /*
  def socket_read(self):
         recv = self.lowlevel.recv(1023)

@@ -50,10 +50,13 @@ void main()
     ecatf.C = 0x00;
     ecatf.NEXT = 0x00;
     ecatf.IRQ = 0x00;
-	ecatf.DATA = (uint8_t*)malloc(sizeof(uint8_t) * (2));
-    ecatf.DATA[0] = 'E';
-	ecatf.DATA[1] = 'T';
-    ecatf.DataSize = 2;
+	ecatf.DATA = (uint8_t*)malloc(sizeof(uint8_t) * (5));
+    ecatf.DATA[0] = 'H';
+	ecatf.DATA[1] = 'E';
+	ecatf.DATA[2] = 'L';
+	ecatf.DATA[3] = 'L';
+	ecatf.DATA[4] = 'O';
+	ecatf.LEN = 5;
     ecatf.WKC = 0x00;
     
     Framebuff_t ecat_frame;
@@ -61,8 +64,7 @@ void main()
     Framebuff_t soccet;
     Framebuff_t send;
 
-     ethercat_fream(&ecatf,&ecat_frame);
-
+	ethercat_build_fream(&ecatf,&ecat_frame);
      dump(ecat_frame.frame,ecat_frame.length);
      ethercat_hedder_add_frame(&ecat_frame,&ecat_hedder);
      dump(ecat_hedder.frame,ecat_hedder.length);
@@ -88,8 +90,32 @@ void main()
 			ltime = localtime(&local_tv_sec);
 			strftime(timestr, sizeof timestr, "%H:%M:%S", ltime);
 			printf("%s,%.6d len:%d\n", timestr, header->ts.tv_usec, header->len);
+			Framebuff_t rdata;
+			EtherCATFrame_t getframe;
+			rdata.frame = Receive_packet;
+			rdata.length = header->len;
 
-			dump(Receive_packet, header->len);
+			dump(rdata.frame, rdata.length);
+			
+			ethercat_decode_fream(&rdata,&getframe);
+
+			printf("--------------------------------------------------------------------\n");
+
+			printf("CMD= 0x%02X \n", getframe.CMD);
+			printf("IDX= 0x%02X \n", getframe.IDX);
+			printf("ADP= 0x%02X \n", getframe.ADP);
+			printf("ADO= 0x%02X \n", getframe.ADO);
+			printf("LEN= 0x%02X \n", getframe.LEN);
+			printf("IRQ= 0x%02X \n", getframe.IRQ);
+			for (int i = 0; i < getframe.LEN; i++)
+			{
+				printf("DATA[%d]: 0x%02X  %c\n", i, getframe.DATA[i], getframe.DATA[i]);
+
+			}
+			printf("WKC= 0x%02X \n", getframe.WKC);
+
+
+
 		}
 	}
 	return 0;
