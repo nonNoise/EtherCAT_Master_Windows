@@ -45,15 +45,15 @@
 // list DATA:
 // int WKC: working counter	
 typedef struct { 	
-	uint16_t CMD;
-	uint16_t IDX;
+	uint8_t CMD;
+	uint8_t IDX;
 	uint16_t ADP;
 	uint16_t ADO;
 	uint16_t LEN;
 	uint8_t C;
 	uint8_t	NEXT;
 	uint8_t	IRQ;
-	uint16_t *DATA;
+	uint8_t *DATA;
 	uint8_t WKC;
 }EtherCATFrame_t;
 
@@ -80,9 +80,9 @@ void ethercat_build_fream(EtherCATFrame_t *input,Framebuff_t *output)
 	output->frame[3] = (input->ADP & 0xFF00) >> 8;
 	output->frame[4] = (input->ADO & 0xFF);      	  		// ADO (2 byte)
 	output->frame[5] = (input->ADO & 0xFF00) >> 8;
-	output->frame[6] = (input->LEN & 0xFF);    		// LEN (2 byte)
+	output->frame[6] = (input->LEN & 0xFF);    				// LEN (2 byte)
 	output->frame[7] = (input->LEN & 0xFF00) >> 8;
-	output->frame[8] = (input->IRQ & 0xFF);            	// IRQ (2 byte)
+	output->frame[8] = (input->IRQ & 0xFF);            		// IRQ (2 byte)
 	output->frame[9] = (input->IRQ & 0x00FF);         		// IRQ (2 byte)
 	for(int i=0;i<input->LEN;i++){
 		output->frame[10 + i] = input->DATA[i];
@@ -156,42 +156,8 @@ void ethercat_decode_fream(Framebuff_t *input,EtherCATFrame_t *output)
     output->WKC = input->frame[16+9 + output->LEN + 1] | ( input->frame[9 + output->LEN + 2] << 8);	// WKC (2 byte)
         
 }
-/*
- def socket_read(self):
-        recv = self.lowlevel.recv(1023)
-        PDUframe = [0]*len(recv)
-        for i in range(len(recv)):
-            if(i >= 16):
-                #print ('[{:d}]: 0x{:02x}'.format(i-16,recv[i]))
-                PDUframe[i-16] = recv[i]
 
-        CMD = PDUframe[0]              # CMD (1 byte)
-        IDX = PDUframe[1]              # IDX (1 byte)
-        ADP = PDUframe[2] | (PDUframe[3] << 8)      # ADP (2 byte)
-        ADO = PDUframe[4] | (PDUframe[5] << 8)    # ADO (2 byte)
-        LEN = PDUframe[6] | (PDUframe[7] << 8)    # LEN (2 byte)
-        IRQ = PDUframe[8] | (PDUframe[9] << 8)    # IRQ (2 byte)
-        DATA = [0] * LEN
-        for i in range(LEN):
-            #print ('[{:d}]: 0x{:02x}'.format(i,self_PDUfream[10+i]))
-            DATA[i] = PDUframe[10 + i]
-        # WKC (2 byte)
-        WKC = PDUframe[9 + LEN + 1] | (PDUframe[9 + LEN + 2] << 8)
-        #frame = [0] * 2
-        #frame[0] = len(PDUframe)
-        #frame[1] = 0x10 | ((0x700 & len(PDUframe)) >> 8)
-        # print("-"*30)
-        # print("CMD= 0x{:02x}".format(CMD))
-        # print("IDX= 0x{:02x}".format(IDX))
-        # print("ADP= 0x{:04x}".format(ADP))
-        # print("ADO= 0x{:04x}".format(ADO))
-        # print("LEN= 0x{:04x}".format(LEN))
-        # print("IRQ= 0x{:04x}".format(IRQ))
-        # for i in range(LEN):
-        #    print ('DATA[%d]: 0x{:02X}'.format(DATA[i]) % (i))
-        # print("WKC= 0x{:04x}".format(WKC))
-        return (DATA, WKC)
-*/
+
 void dump(const unsigned char* data_buffer, const unsigned int length)
 {
 	unsigned char byte;
