@@ -4,7 +4,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-
+#ifndef EtherCATlib_H
+#define EtherCATlib_H
 
 // Auto increment physical read
 #define EtherCAT_Command_APRD	 0x01
@@ -63,11 +64,7 @@ typedef struct {
 }Framebuff_t;
 
 
-
-
-
 void dump(const unsigned char* data_buffer, const unsigned int length);
-
 
 
 void ethercat_build_fream(EtherCATFrame_t *input,Framebuff_t *output)
@@ -140,7 +137,7 @@ void socket_add_fream(Framebuff_t *input,Framebuff_t *output)
 
 void ethercat_decode_fream(Framebuff_t *input,EtherCATFrame_t *output)
 {
-	dump(input->frame, input->length);
+	//dump(input->frame, input->length);
 	
     output->CMD = input->frame[16+0];              // CMD (1 byte)
     output->IDX = input->frame[16+1];              // IDX (1 byte)
@@ -182,3 +179,6 @@ void dump(const unsigned char* data_buffer, const unsigned int length)
 		}
 	}
 }
+
+
+# endif

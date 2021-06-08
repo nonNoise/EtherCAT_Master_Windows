@@ -1,8 +1,9 @@
-#pragma once
 
 #include <pcap.h>
 #include <string.h>
 
+#ifndef pcaplib_H
+#define pcaplib_H
 
 #define EC_MAXLEN_ADAPTERNAME    128
 
@@ -10,10 +11,6 @@ typedef struct {
 	char name[EC_MAXLEN_ADAPTERNAME];		
 	char description[EC_MAXLEN_ADAPTERNAME];
 } pcapDeviceList_t;
-
-
-void packet_handler(u_char* param, const struct pcap_pkthdr* header, const u_char* pkt_data);
-void dump(const unsigned char* data_buffer, const unsigned int length);
 
 
 //================================================================================//
@@ -83,7 +80,7 @@ pcap_t* pcap_OpenDevice(pcapDeviceList_t device)
 		return -1;
 	}
 	
-	printf("\nlistening on %s...\n", device.description);
+	printf("\nlistening on %s...\n", device.name);
 	return adhandle;
 }
 //===================================================================//
@@ -139,3 +136,5 @@ int pcap_Fillter(pcap_t* header,char filter_exp[])
 		exit(1);
 	}
 }
+
+#endif

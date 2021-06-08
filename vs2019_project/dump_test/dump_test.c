@@ -3,6 +3,8 @@
 
 #include "pcaplib.h"
 #include "EtherCATlib.h"
+#include "EtherCAT_API.h"
+
 void packet_handler(u_char* param, const struct pcap_pkthdr* header, const u_char* pkt_data);
 
 
@@ -31,7 +33,7 @@ void main()
 	}
 
 	
-	int select_device_num = 4;
+	int select_device_num = 3;
 
 	adhandle = pcap_OpenDevice(dvicelist[select_device_num]);
 
@@ -42,6 +44,7 @@ void main()
 	pcap_Fillter(adhandle, Filter);
 
 
+	/*
     EtherCATFrame_t ecatf;
     ecatf.CMD = EtherCAT_Command_APWR;
     ecatf.IDX = 0x00;
@@ -58,28 +61,19 @@ void main()
 	ecatf.DATA[4] = 'O';
 	ecatf.LEN = 5;
     ecatf.WKC = 0x00;
-    
-    Framebuff_t ecat_frame;
-    Framebuff_t ecat_hedder;
-    Framebuff_t soccet;
-    Framebuff_t send;
+    */
+	EthereCAT_Reset(adhandle, 0x00);
 
-	ethercat_build_fream(&ecatf,&ecat_frame);
-     dump(ecat_frame.frame,ecat_frame.length);
-     ethercat_hedder_add_frame(&ecat_frame,&ecat_hedder);
-     dump(ecat_hedder.frame,ecat_hedder.length);
-     socket_add_fream(&ecat_hedder,&soccet);
-     dump(soccet.frame,soccet.length);
 
 
 	 char* Receive_packet;
 	 struct pcap_pkthdr* header;
 	
 
-	while(1)
-	{
-		pcap_RawSend(adhandle, soccet.frame , soccet.length);
-
+	//while(1)
+	//{
+		
+		/*
 		if(pcap_RawReceive(adhandle,&header,&Receive_packet)>0)
 		{
 			struct tm* ltime;
@@ -90,6 +84,7 @@ void main()
 			ltime = localtime(&local_tv_sec);
 			strftime(timestr, sizeof timestr, "%H:%M:%S", ltime);
 			printf("%s,%.6d len:%d\n", timestr, header->ts.tv_usec, header->len);
+
 			Framebuff_t rdata;
 			EtherCATFrame_t getframe;
 			rdata.frame = Receive_packet;
@@ -113,12 +108,11 @@ void main()
 
 			}
 			printf("WKC= 0x%02X \n", getframe.WKC);
-
-
-
 		}
-	}
-	return 0;
+		*/
+
+	//}
+	//return 0;
 
 }
 
