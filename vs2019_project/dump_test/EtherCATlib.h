@@ -87,6 +87,7 @@ void ethercat_build_fream(EtherCATFrame_t *input,Framebuff_t *output)
 	output->frame[10 + input->LEN] = (input->WKC & 0xFF);    		// WKC (2 byte)
 	output->frame[11 + input->LEN] = (input->WKC & 0xFF00) >> 8;    // WKC (2 byte)
 	output->length = 11 + input->LEN +1;
+	free(input->DATA);
 	//return *tmp;
 }
 
@@ -138,21 +139,22 @@ void socket_add_fream(Framebuff_t *input,Framebuff_t *output)
 void ethercat_decode_fream(Framebuff_t *input,EtherCATFrame_t *output)
 {
 	//dump(input->frame, input->length);
-	
-    output->CMD = input->frame[16+0];              // CMD (1 byte)
-    output->IDX = input->frame[16+1];              // IDX (1 byte)
-    output->ADP = input->frame[16+2] | (input->frame[16+3] << 8);    // ADP (2 byte)
-    output->ADO = input->frame[16+4] | (input->frame[16+5] << 8);    // ADO (2 byte)
-    output->LEN = input->frame[16+6] | (input->frame[16+7] << 8);    // LEN (2 byte)
-    output->IRQ = input->frame[16+8] | (input->frame[16+9] << 8);    // IRQ (2 byte)
-	output->DATA = (uint8_t*)malloc(sizeof(uint8_t) *  (output->LEN));
-
-	for(int i=0;i<output->LEN;i++)
+	if(input->frame != NULL)
 	{
-        output->DATA[i] = input->frame[16+10 + i];
+		output->CMD = input->frame[16+0];              // CMD (1 byte)
+		output->IDX = input->frame[16+1];              // IDX (1 byte)
+		output->ADP = input->frame[16+2] | (input->frame[16+3] << 8);    // ADP (2 byte)
+		output->ADO = input->frame[16+4] | (input->frame[16+5] << 8);    // ADO (2 byte)
+		output->LEN = input->frame[16+6] | (input->frame[16+7] << 8);    // LEN (2 byte)
+		output->IRQ = input->frame[16+8] | (input->frame[16+9] << 8);    // IRQ (2 byte)
+		output->DATA = (uint8_t*)malloc(sizeof(uint8_t) *  (output->LEN));
+
+		for(int i=0;i<output->LEN;i++)
+		{
+			output->DATA[i] = input->frame[16+10 + i];
+		}
+	    output->WKC = input->frame[16+9 + output->LEN + 1] | ( input->frame[9 + output->LEN + 2] << 8);	// WKC (2 byte)
 	}
-    output->WKC = input->frame[16+9 + output->LEN + 1] | ( input->frame[9 + output->LEN + 2] << 8);	// WKC (2 byte)
-        
 }
 
 

@@ -20,8 +20,8 @@ void EthereCAT_SendRead(pcap_t* adhandle, EtherCATFrame_t* sendecat, EtherCATFra
 
 
 
-    printf("-------- SEND --------\n");
-    EtherCAT_Frame_dump(sendecat);
+    //printf("-------- SEND --------\n");
+    //EtherCAT_Frame_dump(sendecat);
 
     ethercat_build_fream(sendecat, &ecat_frame);
     ethercat_hedder_add_frame(&ecat_frame, &ecat_hedder);
@@ -29,13 +29,15 @@ void EthereCAT_SendRead(pcap_t* adhandle, EtherCATFrame_t* sendecat, EtherCATFra
     pcap_RawSend(adhandle, soccet.frame, soccet.length);
     //dump(soccet.frame, soccet.length);
 
-    pcap_RawReceive(adhandle, &header, &Receive_packet);
+    //printf("-------- READ --------\n");
+    ;
     //dump(Receive_packet, header->len);
-    rdata.frame = Receive_packet;
-    rdata.length = header->len;
-    ethercat_decode_fream(&rdata, readecat);
-    printf("-------- READ --------\n");
-    EtherCAT_Frame_dump(readecat);
+    if(pcap_RawReceive(adhandle, &header, &Receive_packet) != 0)
+    {
+        rdata.frame = Receive_packet;
+        rdata.length = header->len;
+        ethercat_decode_fream(&rdata, readecat);
+    }//EtherCAT_Frame_dump(readecat);
 }
 
 void EthereCAT_Reset(pcap_t* adhandle,uint16_t ADP )
@@ -135,7 +137,7 @@ void EtherCAT_EEPROM_Status(pcap_t* adhandle, uint16_t ADP, uint8_t enable, uint
 {
     EtherCATFrame_t sendecat;
     EtherCATFrame_t readecat;
-    uint16_t data = 0;
+    uint32_t data = 0;
 
     sendecat.CMD = 0x0000;
     sendecat.ADO = 0x0000;
@@ -163,7 +165,7 @@ void EtherCAT_EEPROM_Status(pcap_t* adhandle, uint16_t ADP, uint8_t enable, uint
     {
     
         data = 0x0000;
-        sendecat.CMD = EtherCAT_Command_APWR;
+        sendecat.CMD = EtherCAT_Command_APRD;
         sendecat.ADO = 0x0502;
         sendecat.DATA = (uint8_t*)malloc(sizeof(uint8_t) * (2));
         sendecat.DATA[0] = data & 0xFF;
@@ -172,7 +174,8 @@ void EtherCAT_EEPROM_Status(pcap_t* adhandle, uint16_t ADP, uint8_t enable, uint
 
         EthereCAT_SendRead(adhandle, &sendecat, &readecat);
         data = readecat.DATA[0] & 0xFF | readecat.DATA[1] << 8;
-        if (data & 0x8000 == 0)
+        printf("0x%04X\n", data);
+        if ((data & 0x8000) == 0)
             break;
     }
 
@@ -322,7 +325,7 @@ void EtherCAT_SetUp(pcap_t* adhandle, uint16_t ADP)
 
 }
 
-void EtherCAT_GPIOMode(pcap_t* adhandle, uint16_t ADP, uint16_t data)
+void EtherCAT_GPIOMode(pcap_t* adhandle, uint16_t ADP, uint32_t data)
 {
     EtherCATFrame_t sendecat;
     EtherCATFrame_t readecat;
@@ -341,16 +344,18 @@ void EtherCAT_GPIOMode(pcap_t* adhandle, uint16_t ADP, uint16_t data)
 
     sendecat.CMD = EtherCAT_Command_APWR;
     sendecat.ADO = 0x0F00;
-    sendecat.DATA = (uint8_t*)malloc(sizeof(uint8_t) * (2));
+    sendecat.LEN = 4;
+    sendecat.DATA = (uint8_t*)malloc(sizeof(uint8_t) * (sendecat.LEN));
     sendecat.DATA[0] = data & 0xFF;
     sendecat.DATA[1] = (data >> 8) & 0xFF;
-    sendecat.LEN = 2;
+    sendecat.DATA[2] = (data >> 16) & 0xFF;
+    sendecat.DATA[3] = (data >> 24) & 0xFF;
 
     EthereCAT_SendRead(adhandle, &sendecat, &readecat);
 
 }
 
-void EtherCAT_GPIO_Out(pcap_t* adhandle, uint16_t ADP, uint16_t data)
+void EtherCAT_GPIO_Out(pcap_t* adhandle, uint16_t ADP, uint32_t data)
 {
     EtherCATFrame_t sendecat;
     EtherCATFrame_t readecat;
@@ -368,14 +373,17 @@ void EtherCAT_GPIO_Out(pcap_t* adhandle, uint16_t ADP, uint16_t data)
     sendecat.DATA = NULL;
     sendecat.LEN = 0;
 
-    data = 0x0F00;
     sendecat.CMD = EtherCAT_Command_APWR;
     sendecat.ADO = 0x0F10;
-    sendecat.DATA = (uint8_t*)malloc(sizeof(uint8_t) * (2));
+    sendecat.LEN = 4;
+    sendecat.DATA = (uint8_t*)malloc(sizeof(uint8_t) * (sendecat.LEN));
     sendecat.DATA[0] = data & 0xFF;
     sendecat.DATA[1] = (data >> 8) & 0xFF;
-    sendecat.LEN = 2;
+    sendecat.DATA[2] = (data >> 16) & 0xFF;
+    sendecat.DATA[3] = (data >> 24) & 0xFF;
+
 
     EthereCAT_SendRead(adhandle, &sendecat, &readecat);
+  
 
 }

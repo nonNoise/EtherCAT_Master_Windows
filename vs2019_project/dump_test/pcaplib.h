@@ -68,11 +68,12 @@ pcap_t* pcap_OpenDevice(pcapDeviceList_t device)
 	printf("Open: %s\n", device.name);
 
 	/* Open the device */
-	if ((adhandle = pcap_open_live(device.name,	// name of the device
-							 65536,			// portion of the packet to capture. 
+	if ((adhandle = pcap_open_live(
+							 device.name,	// name of the device
+							 3000,			// portion of the packet to capture. 
 											// 65536 grants that the whole packet will be captured on all the MACs.
 							 1,				// promiscuous mode (nonzero means promiscuous)
-							 1000,			// read timeout
+							 1,			// read timeout (ms)
 							 errbuf			// error buffer
 							 )) == NULL)
 	{
@@ -112,7 +113,7 @@ int pcap_RawReceive(pcap_t* adhandle, struct pcap_pkthdr* header, char* Receive_
 	char timestr[16];
 	time_t local_tv_sec;
 
-	if(res = pcap_next_ex(adhandle, header, Receive_packet) != 0)
+	if(pcap_next_ex(adhandle, header, Receive_packet) != 0)
 	{
 
 		// convert the timestamp to readable format 
@@ -120,6 +121,7 @@ int pcap_RawReceive(pcap_t* adhandle, struct pcap_pkthdr* header, char* Receive_
 		return header->len;
 
 	}
+	Receive_packet = NULL;
 	return 0;
 }
 

@@ -39,7 +39,7 @@ void main()
 
 	//char* Filter = "ether broadcast";
 	//char* Filter = "ether dst ff:ff:ff:ff:ff:ff";
-	char* Filter = "ether src 01:01:01:01:01:01";
+	char* Filter = "ether src 03:01:01:01:01:01";
 
 	pcap_Fillter(adhandle, Filter);
 
@@ -62,8 +62,48 @@ void main()
 	ecatf.LEN = 5;
     ecatf.WKC = 0x00;
     */
-	EthereCAT_Reset(adhandle, 0x00);
+	//EthereCAT_Reset(adhandle, 0x00);
 	EtherCAT_EEPROM_Setup(adhandle,0x00);
+
+	EtherCAT_SetUp(adhandle, 0x00);
+	EtherCAT_GPIOMode(adhandle, 0x00, 0xFFFF);
+	
+	while (1)
+	{
+		EtherCAT_GPIO_Out(adhandle, 0x00, 0xFFFF);
+		EtherCAT_GPIO_Out(adhandle, 0x00, 0x0000);
+
+	}
+
+	/*
+	EtherCATFrame_t sendecat;
+	EtherCATFrame_t readecat;
+	uint32_t data = 0;
+
+	sendecat.CMD = 0x0000;
+	sendecat.ADO = 0x0000;
+	sendecat.ADP = 0x0000;
+	sendecat.IDX = 0x00;
+	sendecat.ADP = 0x00;
+	sendecat.C = 0x00;
+	sendecat.NEXT = 0x00;
+	sendecat.IRQ = 0x00;
+	sendecat.WKC = 0x00;
+	sendecat.DATA = NULL;
+	sendecat.LEN = 0;
+
+	data = 0x0000;
+	sendecat.CMD = EtherCAT_Command_APRD;
+	sendecat.ADO = 0x0E08;
+	sendecat.DATA = (uint8_t*)malloc(sizeof(uint8_t) * (4));
+	sendecat.DATA[0] = data & 0xFF;
+	sendecat.DATA[1] = (data >> 8) & 0xFF;
+	sendecat.DATA[2] = (data >> 16) & 0xFF;
+	sendecat.DATA[3] = (data >> 24) & 0xFF;
+	sendecat.LEN = 4;
+
+	EthereCAT_SendRead(adhandle, &sendecat, &readecat);
+	*/
 
 
 	 char* Receive_packet;
