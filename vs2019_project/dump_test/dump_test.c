@@ -63,7 +63,7 @@ void main()
     ecatf.WKC = 0x00;
     */
 	EthereCAT_Reset(adhandle, 0x00);
-
+	EtherCAT_EEPROM_Setup(adhandle,0x00);
 
 
 	 char* Receive_packet;

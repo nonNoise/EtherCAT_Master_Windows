@@ -146,6 +146,7 @@ void ethercat_decode_fream(Framebuff_t *input,EtherCATFrame_t *output)
     output->LEN = input->frame[16+6] | (input->frame[16+7] << 8);    // LEN (2 byte)
     output->IRQ = input->frame[16+8] | (input->frame[16+9] << 8);    // IRQ (2 byte)
 	output->DATA = (uint8_t*)malloc(sizeof(uint8_t) *  (output->LEN));
+
 	for(int i=0;i<output->LEN;i++)
 	{
         output->DATA[i] = input->frame[16+10 + i];
@@ -178,6 +179,24 @@ void dump(const unsigned char* data_buffer, const unsigned int length)
 			printf("\n");
 		}
 	}
+}
+
+void EtherCAT_Frame_dump(EtherCATFrame_t *getframe)
+{
+	//printf("--------------------------------------------------------------------\n");
+
+    printf("CMD= 0x%02X \n", getframe->CMD);
+    printf("IDX= 0x%02X \n", getframe->IDX);
+    printf("ADP= 0x%02X \n", getframe->ADP);
+    printf("ADO= 0x%02X \n", getframe->ADO);
+    printf("LEN= 0x%02X \n", getframe->LEN);
+    printf("IRQ= 0x%02X \n", getframe->IRQ);
+    for (int i = 0; i < getframe->LEN; i++)
+    {
+        printf("DATA[%d]: 0x%02X  %c\n", i, getframe->DATA[i], getframe->DATA[i]);
+
+    }
+    printf("WKC= 0x%02X \n", getframe->WKC);
 }
 
 
