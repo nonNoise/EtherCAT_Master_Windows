@@ -88,6 +88,8 @@ void ethercat_build_fream(EtherCATFrame_t *input,Framebuff_t *output)
 	output->frame[11 + input->LEN] = (input->WKC & 0xFF00) >> 8;    // WKC (2 byte)
 	output->length = 11 + input->LEN +1;
 	free(input->DATA);
+	input->DATA = NULL;
+
 	//return *tmp;
 }
 
@@ -103,6 +105,8 @@ void ethercat_hedder_add_frame(Framebuff_t *input,Framebuff_t *output)
 	}
 	output->length = (input->length+2);
 	free(input->frame);
+	input->frame = NULL;
+
 }
 
 void socket_add_fream(Framebuff_t *input,Framebuff_t *output)
@@ -132,6 +136,8 @@ void socket_add_fream(Framebuff_t *input,Framebuff_t *output)
 	}
 	output->length = input->length+14;
 	free(input->frame);
+	input->frame = NULL;
+
 
 	//return output->frame.length;
 }
@@ -157,6 +163,21 @@ void ethercat_decode_fream(Framebuff_t *input,EtherCATFrame_t *output)
 	}
 }
 
+void ethercat_frame_init(EtherCATFrame_t* input)
+{
+	input->CMD = 0x0000;
+	input->ADO = 0x0000;
+	input->ADP = 0x0000;
+	input->IDX = 0x00;
+	input->ADP = 0x00;
+	input->C = 0x00;
+	input->NEXT = 0x00;
+	input->IRQ = 0x00;
+	input->WKC = 0x00;
+	input->DATA = NULL;
+	input->LEN = 0;
+
+}
 
 void dump(const unsigned char* data_buffer, const unsigned int length)
 {
